@@ -14,6 +14,11 @@
       "name": "pizza",
       "price": "20000",
       "id": 3
+    },
+    {
+      "name": "juju",
+      "price": "2000",
+      "id": 4
     }
   ]
 }

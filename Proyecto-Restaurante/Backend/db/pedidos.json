@@ -51,6 +51,15 @@
       "producto": "jamon",
       "cantidad": "3",
       "precioTotal": 90000,
+      "estado": "listo",
+      "mesero": "sebas"
+    },
+    {
+      "id": 7,
+      "mesa": "2",
+      "producto": "peperoni",
+      "cantidad": "3",
+      "precioTotal": 30000,
       "estado": "pendiente",
       "mesero": "sebas"
     }
