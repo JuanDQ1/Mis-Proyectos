@@ -1,0 +1,69 @@
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Noto+Sans+Old+South+Arabian&family=Workbench&display=swap');
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+  }
+
+.fondo-login {
+    background-image: url('https://e1.pxfuel.com/desktop-wallpaper/620/658/desktop-wallpaper-mia-khalifa-backgrounds-mia-khalifa.jpg');
+    background-size: cover;
+
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+form {
+    width: 600px; /* Ajusta el ancho del formulario */
+    padding: 20px;
+    border-radius: 10px;
+    /* background-color: #fff; */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Agrega un efecto de sombra sutil */
+    backdrop-filter: blur(50px);
+}
+
+.entry {
+    width: 100%;
+    margin-bottom: 10px; /* Agrega algo de espacio entre los campos de entrada */
+    padding: 10px;
+    border: 1px solid #ccc; /* Agrega un borde para una mejor visibilidad */
+    border-radius: 5px;
+    box-sizing: border-box; /* Incluye el relleno y el borde en el ancho y alto total del elemento */
+}
+
+#btnEnviar {
+    width: 100%;
+    background-color: rgb(48, 27, 238);
+    border: none;
+    border-radius: 5px;
+    padding: 10px;
+    color: white;
+
+    cursor: pointer;
+    transition: background-color 0.3s ease; /* Agrega un efecto de transición suave */
+}
+
+#btnEnviar:hover {
+    background-color: rgb(230, 29, 56); /* Oscurece el color del botón al pasar el cursor sobre él */
+}
+
+#txtBienvenida {
+    color: #333; /* Cambia el color para mejorar la legibilidad */
+}
+
+.txt {
+    /* font-family: "Workbench", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+    font-variation-settings:
+      "BLED" 0,
+      "SCAN" 0; */
+    font-family: Georgia, 'Times New Roman', Times, serif;
+}

@@ -1,0 +1,64 @@
+.mesero-home-container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.form-container {
+    margin-bottom: 20px;
+}
+
+.form-container label {
+    display: block;
+    margin-bottom: 10px;
+}
+
+.form-container input {
+    width: 100%;
+    padding: 8px;
+    margin-top: 10px;
+    margin-bottom: 15px;
+}
+
+.form-container button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+.pedidos-container {
+    margin-top: 20px;
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin-bottom: 10px;
+    background-color: #f9f9f9;
+    max-height: 500px;
+    overflow-y: scroll;
+}
+
+.pedidos-container h2 {
+    margin-bottom: 10px;
+}
+
+.pedido-item {
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin-bottom: 10px;
+    background-color: #f9f9f9;
+}
+
+.pedido-item div {
+    margin-bottom: 5px;
+}
+
+.pedido-item div:last-child {
+    margin-bottom: 0;
+}
+
+.estado-pendiente {
+    color: #ff9933;
+    font-weight: bold;
+}
+
