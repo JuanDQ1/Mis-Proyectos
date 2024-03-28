@@ -8,33 +8,31 @@ const MeseroHome = () => {
     const [cantidad, setCantidad] = useState('');
     const [pedidos, setPedidos] = useState([]);
     const [productos, setProductos] = useState([]); 
+    const [productosSeleccionados, setProductosSeleccionados] = useState([]); // Nuevo estado para mantener los productos seleccionados
 
     useEffect(() => {
         fetchProducts();
-        fetchPedidos()
+        fetchPedidos();
 
         const intervalId = setInterval(() => {
             fetchProducts();
-            fetchPedidos(); // Actualiza también la lista de pedidos cada vez que se actualizan los productos
+            fetchPedidos();
         }, 1000);
 
-        // Limpia el intervalo al desmontar el componente para evitar fugas de memoria
         return () => clearInterval(intervalId);
 
-
-
-      }, []);
+    }, []);
     
-      const fetchProducts = async () => {
+    const fetchProducts = async () => {
         try {
-          const response = await axios.get("http://localhost:3000/restaurante/productosOb");
-          setProductos(response.data.productos);
+            const response = await axios.get("http://localhost:3000/restaurante/productosOb");
+            setProductos(response.data.productos);
         } catch (error) {
-          console.error("Error fetching products:", error);
+            console.error("Error fetching products:", error);
         }
-      };
+    };
 
-      const fetchPedidos = async () => {
+    const fetchPedidos = async () => {
         try {
             const response = await axios.get("http://localhost:3000/restaurante/pedidos");
             setPedidos(response.data.pedidos);
@@ -43,45 +41,74 @@ const MeseroHome = () => {
         }
     };
 
-      const handleSubmit = async (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
         
-        if (!mesa.trim() || !productoSeleccionado.trim() || cantidad <= 0) {
+        if (!mesa.trim() || productosSeleccionados.length === 0) {
             alert("Por favor, llene todos los campos correctamente");
             return;
         }
 
-        const selectedProduct = productos.find(producto => producto.name === productoSeleccionado);
-        if (!selectedProduct) {
-            alert("El producto seleccionado no está disponible.");
-            return;
-        }
+        const nuevosPedidos = productosSeleccionados.map(producto => {
+            const selectedProduct = productos.find(p => p.name === producto.name);
+            const precioTotal = selectedProduct.price * producto.cantidad;
+            return {         
+                mesa,
+                producto: producto.name,
+                cantidad: producto.cantidad,
+                precioTotal,
+                estado: 'pendiente',
+                mesero: localStorage.getItem('usuario')
+            };
+        });
+        console.log(nuevosPedidos);
 
-        const precioTotal = selectedProduct.price * cantidad;
-
-        const nuevoPedido = { mesa, producto: productoSeleccionado, cantidad, precioTotal, estado: 'pendiente', mesero: localStorage.getItem('usuario') };
-        
         try {
-          // Enviar el pedido al servidor backend
-          const response = await axios.post("http://localhost:3000/restaurante/pedidosGu", nuevoPedido);
-          console.log("Pedido guardado:", response.data);
-          // Agregar el nuevo pedido a la lista de pedidos en el estado local
-          setPedidos([...pedidos, nuevoPedido]);
+            // Enviar los pedidos al servidor backend
+            await axios.post("http://localhost:3000/restaurante/pedidosGu", nuevosPedidos);
+            console.log("Pedidos guardados:", nuevosPedidos);
+            // Actualizar la lista de pedidos en el estado local
+            setPedidos([...pedidos, ...nuevosPedidos]);
         } catch (error) {
-          console.error("Error al guardar el pedido:", error);
-          alert("Error al guardar el pedido. Por favor, inténtelo de nuevo.");
+            console.error("Error al guardar los pedidos:", error);
+            alert("Error al guardar los pedidos. Por favor, inténtelo de nuevo.");
         }
         
         setMesa('');
-        setProductoSeleccionado('');
-        setCantidad('');
+        setProductosSeleccionados([]);
     };
 
     const handleChange = (event, setter) => {
         setter(event.target.value);
     };
-    
 
+    const handleAgregarProducto = () => {
+        if (!productoSeleccionado.trim() || cantidad <= 0) {
+            alert("Por favor, seleccione un producto y especifique la cantidad.");
+            return;
+        }
+
+        const existente = productosSeleccionados.find(p => p.name === productoSeleccionado);
+        if (existente) {
+            alert("Este producto ya ha sido seleccionado. Puede cambiar la cantidad en la lista de productos seleccionados.");
+            return;
+        }
+
+        const nuevoProducto = {
+            name: productoSeleccionado,
+            cantidad: cantidad
+        };
+
+        setProductosSeleccionados([...productosSeleccionados, nuevoProducto]);
+        setProductoSeleccionado('');
+        setCantidad('');
+    };
+
+    const handleEliminarProducto = (index) => {
+        const nuevosProductos = [...productosSeleccionados];
+        nuevosProductos.splice(index, 1);
+        setProductosSeleccionados(nuevosProductos);
+    };
 
     return (
         <div> 
@@ -104,23 +131,34 @@ const MeseroHome = () => {
                     Cantidad:
                     <input type="number" value={cantidad} onChange={(event) => handleChange(event, setCantidad)} />
                 </label>
+                <button type="button" onClick={handleAgregarProducto}>Agregar Producto</button>
                 <button type="submit">Enviar</button>
             </form>
+            <div className="productos-seleccionados">
+                <h2>Productos Seleccionados:</h2>
+                <ul>
+                    {productosSeleccionados.map((producto, index) => (
+                        <li key={index} className="producto-seleccionado">
+                            <div>Producto: {producto.name}</div>
+                            <div>Cantidad: {producto.cantidad}</div>
+                            <button type="button" onClick={() => handleEliminarProducto(index)}>Eliminar</button>
+                        </li>
+                    ))}
+                </ul>
+            </div>
             <div className="pedidos-container">
                 <h2>Pedidos:</h2>
                 <ul>
                     {pedidos.map((pedido, index) => (
                         pedido.estado === 'pendiente' && (
-                        <li key={index} className="pedido-item">
-                            <div>Mesero: {pedido.mesero}</div>
-                            <div>Mesa: {pedido.mesa}</div>
-                            <div>Producto: {pedido.producto}</div>
-                            <div>Cantidad: {pedido.cantidad}</div>
-                            <div>Precio Total: {pedido.precioTotal}</div>
-                            <div className="estado-pendiente">Estado: {pedido.estado}</div>
-                            
-                        </li>
-
+                            <li key={index} className="pedido-item">
+                                <div>Mesero: {pedido.mesero}</div>
+                                <div>Mesa: {pedido.mesa}</div>
+                                <div>Producto: {pedido.producto}</div>
+                                <div>Cantidad: {pedido.cantidad}</div>
+                                <div>Precio Total: {pedido.precioTotal}</div>
+                                <div className="estado-pendiente">Estado: {pedido.estado}</div>
+                            </li>
                         )
                     ))}
                 </ul>
@@ -130,6 +168,7 @@ const MeseroHome = () => {
 };
 
 export default MeseroHome;
+
 
 
 

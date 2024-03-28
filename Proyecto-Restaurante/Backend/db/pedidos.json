@@ -12,24 +12,6 @@
     {
       "id": 2,
       "mesa": "2",
-      "producto": "jamon",
-      "cantidad": "3",
-      "precioTotal": 90000,
-      "estado": "listo",
-      "mesero": "juan"
-    },
-    {
-      "id": 3,
-      "mesa": "3",
-      "producto": "pizza",
-      "cantidad": "2",
-      "precioTotal": 40000,
-      "estado": "listo",
-      "mesero": "juan"
-    },
-    {
-      "id": 4,
-      "mesa": "2",
       "producto": "peperoni",
       "cantidad": "3",
       "precioTotal": 30000,
@@ -37,30 +19,12 @@
       "mesero": "sebas"
     },
     {
-      "id": 5,
-      "mesa": "3",
+      "id": 3,
+      "mesa": "2",
       "producto": "jamon",
       "cantidad": "2",
       "precioTotal": 60000,
       "estado": "listo",
-      "mesero": "sebas"
-    },
-    {
-      "id": 6,
-      "mesa": "3",
-      "producto": "jamon",
-      "cantidad": "3",
-      "precioTotal": 90000,
-      "estado": "listo",
-      "mesero": "sebas"
-    },
-    {
-      "id": 7,
-      "mesa": "2",
-      "producto": "peperoni",
-      "cantidad": "3",
-      "precioTotal": 30000,
-      "estado": "pendiente",
       "mesero": "sebas"
     }
   ]

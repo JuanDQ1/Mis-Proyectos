@@ -313,28 +313,38 @@ const eliminarProducto = async (req, res) => {
 
 const guardarPedido = async (req, res) => {
     try {
-        const { mesa, producto, cantidad, precioTotal, estado, mesero } = req.body;
+        const productos = req.body;
 
         // Leer el archivo JSON que contiene los pedidos
         const pedidos = await fs.readFile(path.join(__dirname, '../../db/pedidos.json'));
         const pedidosJson = JSON.parse(pedidos);
 
-        // Generar un nuevo ID para el pedido
-        const nuevoId = pedidosJson.pedidos.length + 1;
+        let maxId = 0;
 
-        // Crear el nuevo pedido
-        const nuevoPedido = { id: nuevoId, mesa, producto, cantidad, precioTotal, estado, mesero };
+        // Buscar el ID máximo actual
+        for (const pedido of pedidosJson.pedidos) {
+            if (pedido.id > maxId) {
+                maxId = pedido.id;
+            }
+        }
 
-        // Agregar el nuevo pedido al array de pedidos
-        pedidosJson.pedidos.push(nuevoPedido);
+        // Incrementar el ID máximo para asignar el nuevo ID
+        maxId += 1;
+
+        // Asignar IDs a los nuevos productos y agregarlos al array de pedidos existente
+        const nuevosPedidos = productos.map(producto => ({
+            id: maxId++, // Asignar el ID y luego incrementar maxId para el próximo producto
+            ...producto
+        }));
+        pedidosJson.pedidos.push(...nuevosPedidos);
 
         // Escribir los datos actualizados en el archivo JSON
         await fs.writeFile(path.join(__dirname, '../../db/pedidos.json'), JSON.stringify(pedidosJson, null, 2));
 
-        // Devolver una respuesta exitosa con los datos del nuevo pedido
+        // Devolver una respuesta exitosa con los datos de los nuevos pedidos
         res.status(201).json({
-            message: 'Pedido agregado correctamente',
-            pedido: nuevoPedido
+            message: 'Pedidos agregados correctamente',
+            pedidos: nuevosPedidos
         });
     } catch (error) {
         console.error('Error al agregar el pedido:', error);
@@ -343,6 +353,9 @@ const guardarPedido = async (req, res) => {
         });
     }
 };
+
+
+
 const obtenerPedidos = async (req, res) => {
     try {
         // Leer el archivo JSON que contiene los pedidos
