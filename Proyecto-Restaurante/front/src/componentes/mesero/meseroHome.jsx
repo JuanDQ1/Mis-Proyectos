@@ -109,9 +109,17 @@ const MeseroHome = () => {
         nuevosProductos.splice(index, 1);
         setProductosSeleccionados(nuevosProductos);
     };
+    const handleSalir = () => {
+        // Aquí puedes agregar la lógica para salir de la sesión, como limpiar el almacenamiento local o redirigir a la página de inicio de sesión
+        // Por ejemplo:
+        localStorage.removeItem('usuario'); // Elimina el usuario almacenado en el localStorage
+        window.location.href = '/'; // Redirige a la página de inicio de sesión
+    };
 
     return (
-        <div> 
+        <div className="fondo-mesero">
+        <div>
+        <div className="form-box"> 
             <form onSubmit={handleSubmit} className="form-container">
                 <h1>Meseros</h1>    
                 <label>
@@ -134,18 +142,25 @@ const MeseroHome = () => {
                 <button type="button" onClick={handleAgregarProducto}>Agregar Producto</button>
                 <button type="submit">Enviar</button>
             </form>
+            </div>
+            
+            
             <div className="productos-seleccionados">
+                
+                
                 <h2>Productos Seleccionados:</h2>
                 <ul>
+                    
                     {productosSeleccionados.map((producto, index) => (
                         <li key={index} className="producto-seleccionado">
                             <div>Producto: {producto.name}</div>
                             <div>Cantidad: {producto.cantidad}</div>
-                            <button type="button" onClick={() => handleEliminarProducto(index)}>Eliminar</button>
+                             <button type="button" onClick={() => handleEliminarProducto(index)}>Eliminar</button> 
                         </li>
                     ))}
                 </ul>
             </div>
+            
             <div className="pedidos-container">
                 <h2>Pedidos:</h2>
                 <ul>
@@ -158,11 +173,16 @@ const MeseroHome = () => {
                                 <div>Cantidad: {pedido.cantidad}</div>
                                 <div>Precio Total: {pedido.precioTotal}</div>
                                 <div className="estado-pendiente">Estado: {pedido.estado}</div>
+                                
                             </li>
+                            
                         )
+                        
                     ))}
                 </ul>
             </div>
+            <button className="btn-salir" onClick={handleSalir}>Salir</button>
+        </div>
         </div>
     );
 };

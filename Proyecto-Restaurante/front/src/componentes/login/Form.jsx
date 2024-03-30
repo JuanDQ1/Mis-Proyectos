@@ -46,27 +46,37 @@ function Form({ callback }) {
   };
 
   return (
-    <div className="fondo-login">
+    <div className="fondo-form">
+    <div className="login-box">
+      <h2>Bienvenido a nuestro restaurante</h2>
       <form onSubmit={handleSubmit}>
-        <h1 id="txtBienvenida">Bienvenido a nuestro restaurante</h1>
-        <h4 className="txt">Nombre de Usuario</h4>
-        <input
-          type="text"
-          className="entry"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-        />
-        <br />
-        <h4 className="txt">Contraseña</h4>
-        <input
-          type="password"
-          className="entry"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        <br />
-        <input type="submit" value="Ingresar" id="btnEnviar" />
+        <div className="user-box">
+          <input
+            type="text"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            required
+          />
+          <label>Usuario</label>
+        </div>
+        <div className="user-box">
+          <input
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+          <label>Contraseña</label>
+        </div>
+        <button type="submit">
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          Entrar
+        </button>
       </form>
+    </div>
     </div>
   );
 }
