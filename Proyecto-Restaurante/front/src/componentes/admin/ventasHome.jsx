@@ -38,10 +38,17 @@ const VentasHome = () => {
       console.error("Error fetching ventas:", error);
     }
   };
+  const handleSalir = () => {
+    // Aquí puedes agregar la lógica para salir de la sesión, como limpiar el almacenamiento local o redirigir a la página de inicio de sesión
+    // Por ejemplo:
+    window.location.href = '/menu'; // Redirige a la página de inicio de sesión
+};
 
   return (
+    <div className="fondo-ventas">
     <div>
       <h1>Ventas</h1>
+      <button className="btn-salir" onClick={handleSalir}>Salir</button>
       <table className="ventas-table">
         <thead>
           <tr>
@@ -60,6 +67,7 @@ const VentasHome = () => {
           ))}
         </tbody>
       </table>
+    </div>
     </div>
   );
 };

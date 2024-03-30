@@ -23,12 +23,6 @@
       "password": "123",
       "role": "admin",
       "id": 4
-    },
-    {
-      "username": "juju",
-      "password": "123",
-      "role": "admin",
-      "id": 5
     }
   ]
 }

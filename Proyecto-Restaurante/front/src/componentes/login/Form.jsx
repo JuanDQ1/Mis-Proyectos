@@ -48,7 +48,7 @@ function Form({ callback }) {
   return (
     <div className="fondo-form">
     <div className="login-box">
-      <h2>Bienvenido a nuestro restaurante</h2>
+      <h2>Bienvenido al restaurante</h2>
       <form onSubmit={handleSubmit}>
         <div className="user-box">
           <input

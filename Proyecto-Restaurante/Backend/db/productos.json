@@ -1,23 +1,13 @@
 {
   "productos": [
     {
-      "name": "peperoni",
-      "price": "10000",
-      "id": 1
-    },
-    {
-      "name": "jamon",
-      "price": "30000",
-      "id": 2
-    },
-    {
       "name": "pizza",
       "price": "20000",
       "id": 3
     },
     {
-      "name": "juju",
-      "price": "2000",
+      "name": "consome",
+      "price": "20000",
       "id": 4
     }
   ]

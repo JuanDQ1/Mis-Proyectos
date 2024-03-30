@@ -1,10 +1,17 @@
 import "../admin/Menu.css";
 import { NavLink } from "react-router-dom";
 
+const handleSalir = () => {
+  // Aquí puedes agregar la lógica para salir de la sesión, como limpiar el almacenamiento local o redirigir a la página de inicio de sesión
+  // Por ejemplo:
+  window.location.href = '/'; // Redirige a la página de inicio de sesión
+};
+
 const Menu = () => {
   return (
     <>
-      <div className="fondo-menu">
+    
+      <div className="fondo-producto">
         <div className="hoola">
           <div>
             <NavLink to="/adminHome" activeClassName="active">
@@ -21,6 +28,7 @@ const Menu = () => {
               ventas
             </NavLink>
           </div>
+          <button className="btn-salir" onClick={handleSalir}>Salir</button>
         </div>
       </div>
     </>

@@ -79,17 +79,22 @@ const AdminHome = () => {
     setEditingProduct({ ...product });
   };
   console.log(products)
+  const handleSalir = () => {
+    // Aquí puedes agregar la lógica para salir de la sesión, como limpiar el almacenamiento local o redirigir a la página de inicio de sesión
+    // Por ejemplo:
+    window.location.href = '/menu'; // Redirige a la página de inicio de sesión
+};
 
   return (
     <>
-    <NavLink to="/Menu" activeClassName="active">atras</NavLink>
+    <div className="fondo-agregar">
     <div className="admin-container">
-      <h2>Product Management</h2>
+      <h2>Agregar Productos</h2>
       <div className="add-product">
-        <h3>Add New Product</h3>
+        <h3>Nuevo Producto</h3>
         <input
           type="text"
-          placeholder="Name"
+          placeholder="Nombre"
           value={newProduct.name}
           onChange={(e) =>
             setNewProduct({ ...newProduct, name: e.target.value })
@@ -98,7 +103,7 @@ const AdminHome = () => {
         />
         <input
           type="text"
-          placeholder="Price"
+          placeholder="Precio"
           value={newProduct.price}
           onChange={(e) =>
             setNewProduct({ ...newProduct, price: e.target.value })
@@ -106,23 +111,24 @@ const AdminHome = () => {
           className="input-field"
         />
           <button onClick={addProduct} className="add-button">
-            Add Product
+            Guardar
           </button>
 
           <button  onClick={edit} className="add-button">
-            Save
+            Editar
           </button>
+          <button className="btn-salir" onClick={handleSalir}>Salir</button>
 
 
       </div>
       <div className="product-list">
-  <h3>Edit Product</h3>
+  <h3>Editar Productos</h3>
   <table>
     <thead>
       <tr>
         <th>ID</th>
-        <th>Name</th>
-        <th>Price</th>
+        <th>Nombre</th>
+        <th>Precio</th>
         <th>opciones</th>
       </tr>
     </thead>
@@ -132,13 +138,14 @@ const AdminHome = () => {
           <td>{product.id}</td>
           <td>{product.name}</td>
           <td>{product.price}</td>
-          <td><p onClick={() => updateProduct(product)}>editar</p></td>
-          <td><p onClick={() => deleteProduct(product.id)}>eliminar</p></td>
+          <td><p onClick={() => updateProduct(product)}><i className="fas fa-edit edit-icon"></i></p></td>
+          <td><p onClick={() => deleteProduct(product.id)}><i className="fas fa-trash-alt delete-icon"></i></p></td>
         </tr>
       ))}
     </tbody>
   </table>
 </div>
+    </div>
     </div>
     </>
   );

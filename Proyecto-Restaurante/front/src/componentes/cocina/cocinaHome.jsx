@@ -39,8 +39,14 @@ const Cocina = () => {
       console.error("Error marking pedido as listo:", error);
     }
   };
+  const handleSalir = () => {
+    // Aquí puedes agregar la lógica para salir de la sesión, como limpiar el almacenamiento local o redirigir a la página de inicio de sesión
+    // Por ejemplo:
+    window.location.href = '/'; // Redirige a la página de inicio de sesión
+};
 
   return (
+    <div className="fondo-cocina">
     <div>
       <h1>Cocina</h1>
       <table>
@@ -68,12 +74,15 @@ const Cocina = () => {
                         Marcar como listo
                       </button>
                     )}
+                    <button className="btn-salir" onClick={handleSalir}>Salir</button>
                   </td>
                 </tr>
               )
           )}
         </tbody>
       </table>
+      <button className="btn-salir" onClick={handleSalir}>Salir</button>
+    </div>
     </div>
   );
 };

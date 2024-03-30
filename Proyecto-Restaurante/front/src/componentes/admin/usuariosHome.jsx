@@ -83,21 +83,27 @@ const UsuariosHome = () => {
     setEditingUser({ ...user });
   };
   // console.log(users);
+  const handleSalir = () => {
+    // Aquí puedes agregar la lógica para salir de la sesión, como limpiar el almacenamiento local o redirigir a la página de inicio de sesión
+    // Por ejemplo:
+    window.location.href = '/menu'; // Redirige a la página de inicio de sesión
+};
   return (
+    <div className="fondo-usuarios">
     <div className="admin-container">
-      <h2>User Management</h2>
+      <h2>Usuarios</h2>
       <div className="add-product">
-        <h3>Add New User</h3>
+        <h3>Agregar Usuarios</h3>
         <input
           type="text"
-          placeholder="Username"
+          placeholder="Usuario"
           value={newUser.username}
           onChange={(e) => setNewUser({ ...newUser, username: e.target.value })}
           className="input-field"
         />
         <input
           type="password"
-          placeholder="Password"
+          placeholder="Contraseña"
           value={newUser.password}
           onChange={(e) => setNewUser({ ...newUser, password: e.target.value })}
           className="input-field"
@@ -107,28 +113,29 @@ const UsuariosHome = () => {
           onChange={(e) => setNewUser({ ...newUser, role: e.target.value })}
           className="input-field"
         >
-          <option value="">Select Role</option>
+          <option value="">Roles</option>
           <option value="admin">Admin</option>
           <option value="mesero">Mesero</option>
           <option value="cocina">Cocina</option>
         </select>
         <button onClick={addUser} className="add-button">
-          Add User
+          Guardar Usuario
         </button>
         <button onClick={edit} className="add-button">
-          Save
+          Editar Usuario
         </button>
+        <button className="btn-salir" onClick={handleSalir}>Salir</button>
       </div>
       <div>
-        <h3>Edit users</h3>
+        <h3>Editar Usuario</h3>
         <table className="table-usuarios">
           <thead>
             <tr>
               <th>ID</th>
-              <th>Username</th>
-              <th>Password</th>
+              <th>Usuarios</th>
+              <th>Contraseña</th>
               <th>Role</th>
-              <th>Options</th>
+              <th>Opciones</th>
             </tr>
           </thead>
           <tbody>
@@ -147,6 +154,7 @@ const UsuariosHome = () => {
           </tbody>
         </table>
       </div>
+    </div>
     </div>
   );
 };
