@@ -44,24 +44,7 @@
       "precioTotal": 20000,
       "estado": "listo",
       "mesero": "sebas"
-    },
-    {
-      "id": 6,
-      "mesa": "2",
-      "producto": "pizza",
-      "cantidad": "1",
-      "precioTotal": 20000,
-      "estado": "pendiente",
-      "mesero": "sebas"
-    },
-    {
-      "id": 7,
-      "mesa": "2",
-      "producto": "consome",
-      "cantidad": "2",
-      "precioTotal": 40000,
-      "estado": "pendiente",
-      "mesero": "sebas"
     }
+    
   ]
 }
