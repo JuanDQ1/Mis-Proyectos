@@ -1,0 +1,52 @@
+.hoola {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    align-items: center;
+}
+
+.hoola div {
+    border-radius: 10px;
+    width: 300px;
+    height: 200px;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+    font-size: 24px; /* Tamaño del texto */
+    color: #921010; /* Cambio de color de letra */
+}
+
+.hoola div:nth-child(1) {
+    background-color: rgb(212, 207, 197); /* Rojo */
+}
+
+.hoola div:nth-child(2) {
+    background-color: rgb(212, 207, 197); /* Amarillo */
+}
+
+.hoola div:nth-child(3) {
+    background-color: rgb(212, 207, 197); /* Azul */
+}
+
+.hoola div:hover {
+    transform: translateY(-5px);
+}
+
+.fondo-producto {
+    /* background: rgb(211, 220, 211); */
+    background-image: url('https://images.pexels.com/photos/260922/pexels-photo-260922.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1');
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    background-size: cover;
+    justify-content: center;
+    align-items: center;
+    overflow-y: auto;
+}
+
+
+
+
