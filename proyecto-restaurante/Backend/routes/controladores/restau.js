@@ -3,49 +3,32 @@ const {
 } = require('console');
 const fs = require('fs/promises');
 const path = require('path');
+const Usuario = require('../../db/usuario');
 
 
 const consultarUsuario = async (req, res) => {
-    
-
     try {
-        const usuarios = await fs.readFile(path.join(__dirname, '../../db/users.json'));
-        const usuariosJson = JSON.parse(usuarios)
-        const {
-            username,
-            password
-        } = req.body;
-        const user = usuariosJson.usuarios.find((usuario) => {
-            return (usuario.username == username && usuario.password == password)
-        });
-
-
-
+        const { username, password } = req.body;
+        
+        // Consultar el usuario en la base de datos MongoDB
+        const user = await Usuario.findOne({ username, password });
 
         if (!user) {
-            return res.status(401).json({
-                error: 'Credenciales inválidas'
-            });
+            return res.status(401).json({ error: 'Credenciales inválidas' });
         }
         
-        res.json({
-            status: 200,
-            payload: user
-        });
-
+        res.json({ status: 200, payload: user });
     } catch (error) {
         console.error('Error al consultar el usuario:', error);
-        res.status(500).json({
-            error: 'Error interno del servidor'
-        });
+        res.status(500).json({ error: 'Error interno del servidor' });
     }
 };
 // ---------------------------------------------------------------------------------------------------------------------------------------
 const obtenerUsuarios = async (req, res) => {
     try {
-        const usuarios = await fs.readFile(path.join(__dirname, '../../db/users.json'));
-        const usuariosJson = JSON.parse(usuarios);
-        res.json(usuariosJson);
+        // Consultar todos los usuarios desde la base de datos MongoDB
+        const usuarios = await Usuario.find();
+        res.json(usuarios);
     } catch (error) {
         console.error('Error al obtener los usuarios:', error);
         res.status(500).json({
@@ -56,121 +39,52 @@ const obtenerUsuarios = async (req, res) => {
 
 const agregarUsuario = async (req, res) => {
     try {
-        const {
-            username,
-            password,
-            role
-        } = req.body;
-        const usuarios = await fs.readFile(path.join(__dirname, '../../db/users.json'));
-        const usuariosJson = JSON.parse(usuarios);
-        // const id = usuariosJson.usuarios.length + 1;
-        let maxId = 0;
+        const { username, password, role } = req.body;
 
-        // Itera sobre cada producto y actualiza el ID máximo si encuentras uno mayor
-        usuariosJson.usuarios.forEach(usuario => {
-            if (usuario.id > maxId) {
-                maxId = usuario.id;
+        // Crear un nuevo usuario en la base de datos MongoDB
+        const nuevoUsuario = await Usuario.create({ username, password, role });
+        const usuarios = await Usuario.find();
 
-            }
-        });
-        maxId+= 1;
-        
-        const nuevoUsuario = {
-            username,
-            password,
-            role,
-            id:maxId
-        };
-
-        usuariosJson.usuarios.push(nuevoUsuario);
-        await fs.writeFile(path.join(__dirname, '../../db/users.json'), JSON.stringify(usuariosJson, null, 2));
-        res.status(201).send(usuariosJson);
+        // Respondemos con el nuevo usuario creado
+        res.status(201).json(usuarios);
     } catch (error) {
         console.error('Error al agregar el usuario:', error);
-        res.status(500).json({
-            error: 'Error interno del servidor'
-        });
+        res.status(500).json({ error: 'Error interno del servidor' });
     }
 };
 
 const actualizarUsuario = async (req, res) => {
     try {
-        const {
-            username,
-            password,
-            role,
-            id
-        } = req.body; // Obtener los nuevos datos del usuario del cuerpo de la solicitud
+        const { username, password, role, _id } = req.body;
+        const usuarioActualizado = await Usuario.findByIdAndUpdate(_id, { username, password, role }, { new: true });
 
-        // Leer el archivo JSON que contiene los usuarios
-        const usuarios = await fs.readFile(path.join(__dirname, '../../db/users.json'));
-        const usuariosJson = JSON.parse(usuarios);
-
-        // Buscar el índice del usuario que se va a actualizar
-        const index = usuariosJson.usuarios.findIndex(usuario => usuario.id == id);
-
-        // Si el usuario no se encuentra, devolver un error 404
-        if (index === -1) {
-            return res.status(404).json({
-                error: 'Usuario no encontrado'
-            });
+        if (!usuarioActualizado) {
+            return res.status(404).json({ error: 'Usuario no encontrado' });
         }
 
-        // Actualizar los datos del usuario en el array
-        usuariosJson.usuarios[index].username = username;
-        usuariosJson.usuarios[index].password = password;
-        usuariosJson.usuarios[index].role = role;
-
-        // Escribir los datos actualizados en el archivo JSON
-        await fs.writeFile(path.join(__dirname, '../../db/users.json'), JSON.stringify(usuariosJson, null, 2));
-
-        // Devolver una respuesta exitosa con los datos actualizados del usuario
-        res.status(200).json({
-            message: 'Usuario actualizado correctamente',
-            usuario: usuariosJson.usuarios[index]
-        });
+        res.status(200).json({ message: 'Usuario actualizado correctamente', usuario: usuarioActualizado });
     } catch (error) {
         console.error('Error al actualizar el usuario:', error);
-        res.status(500).json({
-            error: 'Error interno del servidor'
-        });
+        res.status(500).json({ error: 'Error interno del servidor' });
     }
 };
 
 const eliminarUsuario = async (req, res) => {
-    const {
-        id
-    } = req.params;
+    const _id = req.params.id;
     try {
-        // Leer el contenido del archivo usuarios.json
-        const usuarios = await fs.readFile(path.join(__dirname, '../../db/users.json'), 'utf-8');
-        const usuariosJson = JSON.parse(usuarios);
+        // Buscar y eliminar el usuario en la base de datos MongoDB
+        const usuarioEliminado = await Usuario.findByIdAndDelete(_id);
 
-        // Obtener la lista de usuarios
-        const listaUsuarios = usuariosJson.usuarios;
-
-        // Encontrar el índice del usuario a eliminar
-        const index = listaUsuarios.findIndex(usuario => usuario.id === parseInt(id));
-        if (index === -1) {
-            return res.status(404).json({
-                error: 'Usuario no encontrado'
-            });
+        // Si el usuario no se encuentra, devolver un error 404
+        if (!usuarioEliminado) {
+            return res.status(404).json({ error: 'Usuario no encontrado' });
         }
 
-        // Eliminar el usuario del array
-        listaUsuarios.splice(index, 1);
-
-        // Escribir los cambios de vuelta al archivo
-        await fs.writeFile(path.join(__dirname, '../../db/users.json'), JSON.stringify(usuariosJson, null, 2));
-
-        res.json({
-            message: 'Usuario eliminado correctamente'
-        });
+        // Devolver una respuesta exitosa
+        res.json({ message: 'Usuario eliminado correctamente' });
     } catch (error) {
         console.error('Error al eliminar el usuario:', error);
-        res.status(500).json({
-            error: 'Error interno del servidor'
-        });
+        res.status(500).json({ error: 'Error interno del servidor' });
     }
 };
 

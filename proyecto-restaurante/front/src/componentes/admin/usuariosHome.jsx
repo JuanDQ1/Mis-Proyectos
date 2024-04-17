@@ -14,14 +14,14 @@ const UsuariosHome = () => {
 
   useEffect(() => {
     fetchUsers();
-  }, [users]);
+  }, []);
 
   const fetchUsers = async () => {
     try {
       const response = await axios.get(
         "http://localhost:3000/restaurante/usuariosOb"
       );
-      setUsers(response.data.usuarios);
+      setUsers(response.data);
     } catch (error) {
       console.error("Error fetching users:", error);
     }
@@ -33,8 +33,8 @@ const UsuariosHome = () => {
         "http://localhost:3000/restaurante/usuariosAg",
         newUser
       );
-      // console.log(user);
-      setUsers([user.data.usuarios]);
+      console.log(user);
+      setUsers(user.data);
       setNewUser({ username: "", password: "", role: "" });
     } catch (error) {
       console.error("Error adding user:", error);
@@ -42,21 +42,22 @@ const UsuariosHome = () => {
   };
 
   const updateUser = async (user) => {
-    // console.log(user);
+    console.log('user');
+    console.log(user);
     setNewUser({
       ...newUser,
-      id: user.id,
+      _id: user._id,
       username: user.username,
       password: user.password,
       role: user.role,
     });
+    
   };
 
   const edit = async () => {
-    // console.log(newUser);
-    // console.log(users);
+    console.log('users');
+    console.log(newUser);
     try {
-      // newProduct lo envie al backend
       await axios.post(
         `http://localhost:3000/restaurante/usuariosEdit`,
         newUser
@@ -68,9 +69,9 @@ const UsuariosHome = () => {
     }
   };
 
-  const deleteUser = async (id) => {
+  const deleteUser = async (_id) => {
     try {
-      await axios.delete(`http://localhost:3000/restaurante/usuariosEli/${id}`);
+      await axios.delete(`http://localhost:3000/restaurante/usuariosEli/${_id}`);
 
       // Una vez que la eliminación sea exitosa, actualiza la lista de productos
       fetchUsers();
@@ -88,6 +89,7 @@ const UsuariosHome = () => {
     // Por ejemplo:
     window.location.href = '/menu'; // Redirige a la página de inicio de sesión
 };
+
   return (
     <div className="fondo-usuarios">
     <div className="admin-container">
@@ -141,13 +143,13 @@ const UsuariosHome = () => {
           <tbody>
             {users.map((user, index) => (
               <tr key={index}>
-                <td>{user.id}</td>
+                <td>{index}</td>
                 <td>{user.username}</td>
                 <td>{user.password}</td>
                 <td>{user.role}</td>
                 <td>
                   <p onClick={() => updateUser(user)}>editar</p>
-                  <p onClick={() => deleteUser(user.id)}><i class="icon-eliminar fas fa-user-minus"></i></p>
+                  <p onClick={() => deleteUser(user._id)}><i class="icon-eliminar fas fa-user-minus"></i></p>
                 </td>
               </tr>
             ))}
