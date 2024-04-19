@@ -5,6 +5,7 @@ const fs = require('fs/promises');
 const path = require('path');
 const Usuario = require('../../db/usuario');
 const Producto = require('../../db/producto');
+const Pedido = require('../../db/pedido');
 
 
 const consultarUsuario = async (req, res) => {
@@ -140,115 +141,57 @@ const eliminarProducto = async (req, res) => {
     }
 };
 //-------------------------------------------------------------------------------------
-const guardarPedido = async (req, res) => {
-    try {
-        const productos = req.body;
-
-        // Leer el archivo JSON que contiene los pedidos
-        const pedidos = await fs.readFile(path.join(__dirname, '../../db/pedidos.json'));
-        const pedidosJson = JSON.parse(pedidos);
-
-        let maxId = 0;
-
-        // Buscar el ID máximo actual
-        for (const pedido of pedidosJson.pedidos) {
-            if (pedido.id > maxId) {
-                maxId = pedido.id;
-            }
-        }
-
-        // Incrementar el ID máximo para asignar el nuevo ID
-        maxId += 1;
-
-        // Asignar IDs a los nuevos productos y agregarlos al array de pedidos existente
-        const nuevosPedidos = productos.map(producto => ({
-            id: maxId++, // Asignar el ID y luego incrementar maxId para el próximo producto
-            ...producto
-        }));
-        pedidosJson.pedidos.push(...nuevosPedidos);
-
-        // Escribir los datos actualizados en el archivo JSON
-        await fs.writeFile(path.join(__dirname, '../../db/pedidos.json'), JSON.stringify(pedidosJson, null, 2));
-
-        // Devolver una respuesta exitosa con los datos de los nuevos pedidos
-        res.status(201).json({
-            message: 'Pedidos agregados correctamente',
-            pedidos: nuevosPedidos
-        });
-    } catch (error) {
-        console.error('Error al agregar el pedido:', error);
-        res.status(500).json({
-            error: 'Error interno del servidor'
-        });
-    }
-};
-
-
-
+// Obtener todos los pedidos
 const obtenerPedidos = async (req, res) => {
     try {
-        // Leer el archivo JSON que contiene los pedidos
-        const pedidos = await fs.readFile(path.join(__dirname, '../../db/pedidos.json'));
-        const pedidosJson = JSON.parse(pedidos);
-
-        // Devolver los pedidos como respuesta
-        res.status(200).json({
-            pedidos: pedidosJson.pedidos
-        });
+        const pedidos = await Pedido.find();
+        res.status(200).json({ pedidos });
     } catch (error) {
         console.error('Error al obtener los pedidos:', error);
-        res.status(500).json({
-            error: 'Error interno del servidor'
-        });
+        res.status(500).json({ error: 'Error interno del servidor' });
     }
 };
+
+// Crear un nuevo pedido
+const guardarPedido = async (req, res) => {
+    try {
+        const nuevosPedidos = [];
+        for (const pedidoData of req.body) {
+            const nuevoPedido = new Pedido(pedidoData);
+            await nuevoPedido.save();
+            nuevosPedidos.push(nuevoPedido);
+        }
+        res.status(201).json({ message: 'Pedidos agregados correctamente', pedidos: nuevosPedidos });
+    } catch (error) {
+        console.error('Error al agregar los pedidos:', error);
+        res.status(500).json({ error: 'Error interno del servidor' });
+    }
+};
+
+// Marcar un pedido como listo
 const marcarPedidoListo = async (req, res) => {
     try {
-        const pedidoId = parseInt(req.params.id);
-        // Leer el archivo JSON que contiene los pedidos
-        const pedidos = await fs.readFile(path.join(__dirname, '../../db/pedidos.json'));
-        const pedidosJson = JSON.parse(pedidos);
-
-        // Encuentra el pedido en el array de pedidos
-        const pedido = pedidosJson.pedidos.find(pedido => pedido.id === pedidoId);
+        const pedidoId = req.params.id;
+        const pedido = await Pedido.findByIdAndUpdate(pedidoId, { estado: 'listo' }, { new: true });
         if (!pedido) {
             return res.status(404).json({ error: 'Pedido no encontrado' });
         }
-
-        // Marcar el pedido como listo
-        pedido.estado = 'listo';
-
-        // Escribir los datos actualizados en el archivo JSON
-        await fs.writeFile(path.join(__dirname, '../../db/pedidos.json'), JSON.stringify(pedidosJson, null, 2));
-
-        // Devolver una respuesta exitosa
-        res.status(200).json({
-            message: 'Pedido marcado como listo',
-            pedido: pedido
-        });
+        res.status(200).json({ message: 'Pedido marcado como listo', pedido });
     } catch (error) {
         console.error('Error al marcar el pedido como listo:', error);
-        res.status(500).json({
-            error: 'Error interno del servidor'
-        });
+        res.status(500).json({ error: 'Error interno del servidor' });
     }
 };
+
+// Obtener pedidos por mesero
 const obtenerPedidosPorMesero = async (req, res) => {
     try {
         const mesero = req.params.mesero;
-        const pedidos = await fs.readFile(path.join(__dirname, '../../db/pedidos.json'));
-        const pedidosJson = JSON.parse(pedidos);
-
-        // Filtrar los pedidos por el nombre del mesero
-        const pedidosPorMesero = pedidosJson.pedidos.filter(pedido => pedido.mesero === mesero);
-
-        // Devolver los pedidos encontrados
-        res.status(200).json({ pedidos: pedidosPorMesero });
+        const pedidos = await Pedido.find({ mesero });
+        res.status(200).json({ pedidos });
     } catch (error) {
         console.error('Error al obtener pedidos por mesero:', error);
-        res.status(500).json({
-            error: 'Error interno del servidor'
-        });
+        res.status(500).json({ error: 'Error interno del servidor' });
     }
 };
 

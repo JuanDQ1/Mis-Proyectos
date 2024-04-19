@@ -131,7 +131,7 @@ const MeseroHome = () => {
                     <select value={productoSeleccionado} onChange={(event) => handleChange(event, setProductoSeleccionado)}>
                         <option value="">Seleccione un producto</option>
                         {productos.map(product => (
-                            <option key={product.id} value={product.name}>{product.name}</option>
+                            <option key={product._id} value={product.name}>{product.name}</option>
                         ))}
                     </select>
                 </label>

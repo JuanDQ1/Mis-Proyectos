@@ -44,6 +44,33 @@
       "precioTotal": 20000,
       "estado": "listo",
       "mesero": "sebas"
+    },
+    {
+      "id": 6,
+      "mesa": "2",
+      "producto": "calderon especial ",
+      "cantidad": "1",
+      "precioTotal": 20000,
+      "estado": "listo",
+      "mesero": "calderon"
+    },
+    {
+      "id": 7,
+      "mesa": "2",
+      "producto": "calderon especial ",
+      "cantidad": "1",
+      "precioTotal": 20000,
+      "estado": "listo",
+      "mesero": "admin"
+    },
+    {
+      "id": 8,
+      "mesa": "2",
+      "producto": "calderon especial ",
+      "cantidad": "1",
+      "precioTotal": 20000,
+      "estado": "pendiente",
+      "mesero": "calderon"
     }
   ]
 }

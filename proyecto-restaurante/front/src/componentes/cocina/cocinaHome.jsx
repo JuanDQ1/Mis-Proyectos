@@ -25,15 +25,15 @@ const Cocina = () => {
     }
   };
 
-  const marcarPedidoListo = async (id) => {
+  const marcarPedidoListo = async (_id) => {
     try {
       // Envía una solicitud al backend para marcar el pedido como listo
-      await axios.post(`http://localhost:3000/restaurante/pedidosAc/${id}`, {
+      await axios.post(`http://localhost:3000/restaurante/pedidosAc/${_id}`, {
         estado: "listo",
       });
-
+  
       // Después de que la solicitud se complete con éxito, actualiza la lista de pedidos
-      const updatedPedidos = pedidos.filter((pedido) => pedido.id !== id);
+      const updatedPedidos = pedidos.filter((pedido) => pedido._id !== _id); // Cambiar 'id' a '_id'
       setPedidos(updatedPedidos);
     } catch (error) {
       console.error("Error marking pedido as listo:", error);
@@ -63,14 +63,14 @@ const Cocina = () => {
           {pedidos.map(
             (pedido) =>
               pedido.estado === "pendiente" && (
-                <tr key={pedido.id}>
+                <tr key={pedido._id}>
                   <td>{pedido.mesa}</td>
                   <td>{pedido.producto}</td>
                   <td>{pedido.cantidad}</td>
                   <td>{pedido.estado}</td>
                   <td>
                     {pedido.estado === "pendiente" && (
-                      <button onClick={() => marcarPedidoListo(pedido.id)}>
+                      <button onClick={() => marcarPedidoListo(pedido._id)}>
                         Marcar como listo
                       </button>
                     )}
