@@ -8,6 +8,7 @@ import "../styles/adminHome.css"; // Importamos el archivo CSS
 
 import Menu from "./menu";
 
+
 const AdminHome = () => {
   const [products, setProducts] = useState([]);
   const [newProduct, setNewProduct] = useState({ name: "", price: "" });
@@ -21,7 +22,7 @@ const AdminHome = () => {
     try {
       const response = await axios.get("http://localhost:3000/restaurante/productosOb");
       // console.log(response)
-      setProducts(response.data.productos);
+      setProducts(response.data);
     } catch (error) {
       console.error("Error fetching products:", error);
     }
@@ -30,8 +31,8 @@ const AdminHome = () => {
   const addProduct = async () => {
     try {
      const product = await axios.post("http://localhost:3000/restaurante/productosAg", newProduct);
-     console.log(product.data.productos);
-     setProducts(product.data.productos)
+    //  console.log(product.data.productos);
+     setProducts(product.data);
       setNewProduct({ name: "", price: "" });
       fetchProducts();
     } catch (error) {
@@ -43,7 +44,7 @@ const AdminHome = () => {
     console.log(product);
     setNewProduct({
       ...newProduct,
-      id: product.id,
+      _id: product._id,
       name: product.name,
       price: product.price
     });
@@ -54,7 +55,7 @@ const AdminHome = () => {
     console.log(products)
     try {
       // newProduct lo envie al backend 
-      await axios.post(`http://localhost:3000/restaurante/productosEdit`,newProduct);
+       await axios.post(`http://localhost:3000/restaurante/productosEdit`,newProduct);
       setEditingProduct(null);
       fetchProducts();
     } catch (error) {
@@ -62,10 +63,10 @@ const AdminHome = () => {
     }
   }
 
-  const deleteProduct = async (id) => {
+  const deleteProduct = async (_id) => {
     try {
       
-      await axios.delete(`http://localhost:3000/restaurante/productosEli/${id}`,);
+      await axios.delete(`http://localhost:3000/restaurante/productosEli/${_id}`,);
   
       // Una vez que la eliminación sea exitosa, actualiza la lista de productos
       fetchProducts();
@@ -135,11 +136,11 @@ const AdminHome = () => {
     <tbody>
       {products.map((product,index) => (
         <tr key={index}>
-          <td>{product.id}</td>
+          <td>{index}</td>
           <td>{product.name}</td>
           <td>{product.price}</td>
           <td><p onClick={() => updateProduct(product)}><i className="fas fa-edit edit-icon"></i></p></td>
-          <td><p onClick={() => deleteProduct(product.id)}><i className="fas fa-trash-alt delete-icon"></i></p></td>
+          <td><p onClick={() => deleteProduct(product._id)}><i className="fas fa-trash-alt delete-icon"></i></p></td>
         </tr>
       ))}
     </tbody>

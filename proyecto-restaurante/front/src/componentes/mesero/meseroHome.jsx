@@ -26,7 +26,7 @@ const MeseroHome = () => {
     const fetchProducts = async () => {
         try {
             const response = await axios.get("http://localhost:3000/restaurante/productosOb");
-            setProductos(response.data.productos);
+            setProductos(response.data);
         } catch (error) {
             console.error("Error fetching products:", error);
         }

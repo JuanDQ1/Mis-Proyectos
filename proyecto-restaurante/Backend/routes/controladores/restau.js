@@ -4,6 +4,7 @@ const {
 const fs = require('fs/promises');
 const path = require('path');
 const Usuario = require('../../db/usuario');
+const Producto = require('../../db/producto');
 
 
 const consultarUsuario = async (req, res) => {
@@ -91,135 +92,54 @@ const eliminarUsuario = async (req, res) => {
 // ---------------------------------------------------------------------------------------------------------------------------------------
 const obtenerProductos = async (req, res) => {
     try {
-        const productos = await fs.readFile(path.join(__dirname, '../../db/productos.json'));
-        const productosJson = JSON.parse(productos);
-        res.json(productosJson);
+        const productos = await Producto.find();
+        res.json(productos);
     } catch (error) {
         console.error('Error al obtener los productos:', error);
-        res.status(500).json({
-            error: 'Error interno del servidor'
-        });
+        res.status(500).json({ error: 'Error interno del servidor' });
     }
 };
 
 const agregarProducto = async (req, res) => {
     try {
-        const {
-            name,
-            price
-        } = req.body;
-        const productos = await fs.readFile(path.join(__dirname, '../../db/productos.json'));
-        const productosJson = JSON.parse(productos);
-        // const id = productosJson.productos.length+1;
-        let maxId = 0;
-
-        // Itera sobre cada producto y actualiza el ID máximo si encuentras uno mayor
-        productosJson.productos.forEach(producto => {
-            if (producto.id > maxId) {
-                maxId = producto.id;
-
-            }
-        });
-        maxId+= 1;
-        const nuevoProducto = {
-            name,
-            price,
-            id:maxId
-        };
-
-
-        productosJson.productos.push(nuevoProducto);
-        await fs.writeFile(path.join(__dirname, '../../db/productos.json'), JSON.stringify(productosJson, null, 2));
-        res.status(201).send(productosJson);
-
+        const { name, price } = req.body;
+        const nuevoProducto = await Producto.create({ name, price });
+        const productos = await Producto.find();
+        res.status(201).json(productos);
     } catch (error) {
         console.error('Error al agregar el producto:', error);
-        res.status(500).json({
-            error: 'Error interno del servidor'
-        });
+        res.status(500).json({ error: 'Error interno del servidor' });
     }
 };
 const actualizarProducto = async (req, res) => {
     try {
-        const {
-            name,
-            price,
-            id
-        } = req.body; // Obtener los nuevos datos del producto del cuerpo de la solicitud
-
-        // Leer el archivo JSON que contiene los productos
-        const productos = await fs.readFile(path.join(__dirname, '../../db/productos.json'));
-        const productosJson = JSON.parse(productos);
-
-        // Buscar el índice del producto que se va a actualizar
-        const index = productosJson.productos.findIndex(producto => producto.id == id);
-
-        // Si el producto no se encuentra, devolver un error 404
-        if (index === -1) {
-            return res.status(404).json({
-                error: 'Producto no encontrado'
-            });
+        const { name, price, _id } = req.body;
+        const productoActualizado = await Producto.findByIdAndUpdate(_id, { name, price }, { new: true });
+        if (!productoActualizado) {
+            return res.status(404).json({ error: 'Producto no encontrado' });
         }
-
-        // Actualizar los datos del producto en el array
-        productosJson.productos[index].name = name;
-        productosJson.productos[index].price = price;
-
-        // Escribir los datos actualizados en el archivo JSON
-        await fs.writeFile(path.join(__dirname, '../../db/productos.json'), JSON.stringify(productosJson, null, 2));
-
-        // Devolver una respuesta exitosa con los datos actualizados del producto
-        res.status(200).json({
-            message: 'Producto actualizado correctamente',
-            producto: productosJson.productos[index]
-        });
+        res.status(200).json({ message: 'Producto actualizado correctamente', producto: productoActualizado });
     } catch (error) {
         console.error('Error al actualizar el producto:', error);
-        res.status(500).json({
-            error: 'Error interno del servidor'
-        });
+        res.status(500).json({ error: 'Error interno del servidor' });
     }
 };
 
 const eliminarProducto = async (req, res) => {
-    const {
-        id
-    } = req.params;
-    // console.log(id);
-
+    const _id = req.params.id;
     try {
-        // Leer el contenido del archivo productos.json
-        const productos = await fs.readFile(path.join(__dirname, '../../db/productos.json'), 'utf-8');
-        const productosJson = JSON.parse(productos);
+        const productoEliminado = await Producto.findByIdAndDelete(_id);
 
-        // Obtener la lista de productos
-        const listaProductos = productosJson.productos;
-
-        // Encontrar el índice del producto a eliminar
-        const index = listaProductos.findIndex(producto => producto.id === parseInt(id));
-        if (index === -1) {
-            return res.status(404).json({
-                error: 'Producto no encontrado'
-            });
+        if (!productoEliminado) {
+            return res.status(404).json({ error: 'Producto no encontrado' });
         }
-
-        // Eliminar el producto del array
-        listaProductos.splice(index, 1);
-
-        // Escribir los cambios de vuelta al archivo
-        await fs.writeFile(path.join(__dirname, '../../db/productos.json'), JSON.stringify(productosJson, null, 2));
-
-        res.json({
-            message: 'Producto eliminado correctamente'
-        });
+        res.json({ message: 'Producto eliminado correctamente' });
     } catch (error) {
         console.error('Error al eliminar el producto:', error);
-        res.status(500).json({
-            error: 'Error interno del servidor'
-        });
+        res.status(500).json({ error: 'Error interno del servidor' });
     }
 };
-
+//-------------------------------------------------------------------------------------
 const guardarPedido = async (req, res) => {
     try {
         const productos = req.body;
