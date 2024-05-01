@@ -21,46 +21,50 @@ const TiquetesHome = () => {
 
   return (
     <div className="ticket-form">
-      <form onSubmit={handleSubmit}>
-        <div className="form-field">
-          <label htmlFor="name">Nombre:</label>
-          <input
-            type="text"
-            id="name"
-            value={name}
-            onChange={(event) => setName(event.target.value)}
-          />
+      <h1>Vuelos Quijano</h1>
+      <form onSubmit={handleSubmit} className="form-horizontal">
+        <div className="form-inline">
+          <div className="form-field">
+            <input
+              type="text"
+              id="name"
+              placeholder='Nombre'
+              value={name}
+              onChange={(event) => setName(event.target.value)}
+            />
+          </div>
+          <div className="form-field">
+            <input
+              type="text"
+              id="origin"
+              placeholder='Origen'
+              value={origin}
+              onChange={(event) => setOrigin(event.target.value)}
+            />
+          </div>
+          <div className="form-field">
+            <input
+              type="text"
+              id="destination"
+              placeholder='Destino'
+              value={destination}
+              onChange={(event) => setDestination(event.target.value)}
+            />
+          </div>
+          <div className="form-field">
+            <input
+              type="date"
+              id="date"
+              value={date}
+              onChange={(event) => setDate(event.target.value)}
+            />
+          </div>
         </div>
-        <div className="form-field">
-          <label htmlFor="origin">Origen:</label>
-          <input
-            type="text"
-            id="origin"
-            value={origin}
-            onChange={(event) => setOrigin(event.target.value)}
-          />
+        <div className='contenedor-boton'>
+          <button type="submit" className="generate-ticket-button">
+            Generar Boleto
+          </button>
         </div>
-        <div className="form-field">
-          <label htmlFor="destination">Destino:</label>
-          <input
-            type="text"
-            id="destination"
-            value={destination}
-            onChange={(event) => setDestination(event.target.value)}
-          />
-        </div>
-        <div className="form-field">
-          <label htmlFor="date">Fecha:</label>
-          <input
-            type="date"
-            id="date"
-            value={date}
-            onChange={(event) => setDate(event.target.value)}
-          />
-        </div>
-        <button type="submit" className="generate-ticket-button">
-          Generar Boleto
-        </button>
       </form>
       
       {/* Contenedor para mostrar el boleto generado */}
