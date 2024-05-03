@@ -1,88 +1,96 @@
-import React, { useState, useEffect } from 'react';
-import '../styles/ticket.css';
+import React, { useState, useEffect } from "react";
+import "../styles/ticket.css";
 
 const TiquetesHome = () => {
-  const [name, setName] = useState('');
-  const [origin, setOrigin] = useState('');
-  const [destination, setDestination] = useState('');
-  const [date, setDate] = useState('');
-  const [generatedTicket, setGeneratedTicket] = useState(null);
+  const [name, setName] = useState("");
+  const [origin, setOrigin] = useState("");
+  const [destination, setDestination] = useState("");
+  const [date, setDate] = useState("");
+  const [generatedTickets, setGeneratedTickets] = useState([]);
   const [originSuggestions, setOriginSuggestions] = useState([]);
   const [destinationSuggestions, setDestinationSuggestions] = useState([]);
 
   useEffect(() => {
     if (origin) {
       fetch(`http://localhost:3000/tiquetes/paises?query=${origin}`)
-        .then(response => response.json())
-        .then(data => setOriginSuggestions(data))
-        .catch(error => console.error('Error fetching origin suggestions:', error));
+        .then((response) => response.json())
+        .then((data) => setOriginSuggestions(data))
+        .catch((error) =>
+          console.error("Error fetching origin suggestions:", error)
+        );
     }
   }, [origin]);
 
   useEffect(() => {
     if (destination) {
       fetch(`http://localhost:3000/tiquetes/paises?query=${destination}`)
-        .then(response => response.json())
-        .then(data => setDestinationSuggestions(data))
-        .catch(error => console.error('Error fetching destination suggestions:', error));
+        .then((response) => response.json())
+        .then((data) => setDestinationSuggestions(data))
+        .catch((error) =>
+          console.error("Error fetching destination suggestions:", error)
+        );
     }
   }, [destination]);
 
-// Función para manejar la selección de una sugerencia de origen
-const handleOriginSelection = (selectedName) => {
-  setOrigin(selectedName);
-  // Limpiar las sugerencias de origen después de seleccionar una
-  setOriginSuggestions([]);
-};
-
-// Función para manejar la selección de una sugerencia de destino
-const handleDestinationSelection = (selectedName) => {
-  setDestination(selectedName);
-  // Limpiar las sugerencias de destino después de seleccionar una
-  setDestinationSuggestions([]);
-};
-
-
-const handleSubmit = (event) => {
-  event.preventDefault();
-  
-  // Verificar que el origen y el destino sean diferentes
-  if (origin === destination) {
-    alert('El origen y el destino deben ser diferentes');
-    return;
-  }
-  
-  // Construir el objeto del tiquete
-  const ticket = {
-    name,
-    origin,
-    destination,
-    date,
+  // Función para manejar la selección de una sugerencia de origen
+  const handleOriginSelection = (selectedName) => {
+    setOrigin(selectedName);
+    // Limpiar las sugerencias de origen después de seleccionar una
+    setOriginSuggestions([]);
   };
-  
-  // Realizar la solicitud POST al endpoint para guardar el tiquete
-  fetch('http://localhost:3000/tiquetes/tiquete', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(ticket),
-  })
-  .then(response => {
-    if (!response.ok) {
-      throw new Error('Error al guardar el tiquete');
+
+  // Función para manejar la selección de una sugerencia de destino
+  const handleDestinationSelection = (selectedName) => {
+    setDestination(selectedName);
+    // Limpiar las sugerencias de destino después de seleccionar una
+    setDestinationSuggestions([]);
+  };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    
+    // Verificar que el origen y el destino sean diferentes
+    if (origin === destination) {
+      alert('El origen y el destino deben ser diferentes');
+      return;
     }
-    return response.json();
-  })
-  .then(data => {
-    // Actualizar el estado para mostrar el boleto generado
-    setGeneratedTicket(data);
-  })
-  .catch(error => {
-    console.error('Error al guardar el tiquete:', error);
-    // Manejar el error, mostrar un mensaje al usuario, etc.
-  });
-};
+    
+    // Construir el objeto del tiquete
+    const ticket = {
+      name,
+      origin,
+      destination,
+      date,
+    };
+    
+    // Realizar la solicitud POST al endpoint para guardar el tiquete
+    fetch('http://localhost:3000/tiquetes/tiquete', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(ticket),
+    })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Error al guardar el tiquete');
+      }
+      return response.json();
+    })
+    .then(data => {
+      // Actualizar el estado para mostrar el boleto generado
+      setGeneratedTickets([...generatedTickets, data]);
+      // Limpiar los campos del formulario
+      setName('');
+      setOrigin('');
+      setDestination('');
+      setDate('');
+    })
+    .catch(error => {
+      console.error('Error al guardar el tiquete:', error);
+      // Manejar el error, mostrar un mensaje al usuario, etc.
+    });
+  };
 
   return (
     <div className="ticket-form">
@@ -93,7 +101,7 @@ const handleSubmit = (event) => {
             <input
               type="text"
               id="name"
-              placeholder='Nombre'
+              placeholder="Nombre"
               value={name}
               onChange={(event) => setName(event.target.value)}
             />
@@ -102,14 +110,14 @@ const handleSubmit = (event) => {
             <input
               type="text"
               id="origin"
-              placeholder='Origen'
+              placeholder="Origen"
               value={origin}
               onChange={(event) => setOrigin(event.target.value)}
             />
             <ul>
-              {originSuggestions.map(suggestion => (
-                <li 
-                  key={suggestion._id} 
+              {originSuggestions.map((suggestion) => (
+                <li
+                  key={suggestion._id}
                   onClick={() => handleOriginSelection(suggestion.name)} // Manejar la selección de la sugerencia
                 >
                   {suggestion.name}
@@ -121,14 +129,14 @@ const handleSubmit = (event) => {
             <input
               type="text"
               id="destination"
-              placeholder='Destino'
+              placeholder="Destino"
               value={destination}
               onChange={(event) => setDestination(event.target.value)}
             />
             <ul>
-              {destinationSuggestions.map(suggestion => (
-                <li 
-                  key={suggestion._id} 
+              {destinationSuggestions.map((suggestion) => (
+                <li
+                  key={suggestion._id}
                   onClick={() => handleDestinationSelection(suggestion.name)} // Manejar la selección de la sugerencia
                 >
                   {suggestion.name}
@@ -145,26 +153,25 @@ const handleSubmit = (event) => {
             />
           </div>
         </div>
-        <div className='contenedor-boton'>
+        <div className="contenedor-boton">
           <button type="submit" className="generate-ticket-button">
             Generar Boleto
           </button>
         </div>
       </form>
-      
+
       {/* Contenedor para mostrar el boleto generado */}
-      {generatedTicket && (
-        <div className="generated-ticket-container">
+      {generatedTickets.map((ticket, index) => (
+        <div key={index} className="generated-ticket-container">
           <h2>¡Boleto generado!</h2>
-          <p>Nombre: {generatedTicket.name}</p>
-          <p>Origen: {generatedTicket.origin}</p>
-          <p>Destino: {generatedTicket.destination}</p>
-          <p>Fecha: {generatedTicket.date}</p>
+          <p>Nombre: {ticket.name}</p>
+          <p>Origen: {ticket.origin}</p>
+          <p>Destino: {ticket.destination}</p>
+          <p>Fecha: {ticket.date}</p>
         </div>
-      )}
+      ))}
     </div>
   );
 };
 
 export default TiquetesHome;
-
