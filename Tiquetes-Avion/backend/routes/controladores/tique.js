@@ -17,14 +17,26 @@ const obtenerPaises = async (req, res) => {
   const guardarTiquete = async (req, res) => {
     try {
       const { name, origin, destination, date } = req.body;
-      
-      // Verificar si ya existe un boleto con el mismo origen y destino
-      const existingTicket = await Ticket.findOne({ origin, destination });
-      if (existingTicket) {
-        return res.status(400).json({ message: 'Ya existe un boleto con el mismo origen y destino' });
+  
+      // Verificar si ya existe un boleto con el mismo origen
+      const existingOriginTicket = await Ticket.findOne({ origin });
+      if (existingOriginTicket) {
+        return res.status(400).json({ message: 'Ya existe un boleto con el mismo origen' });
       }
   
-      // Si no existe, guardar el nuevo boleto
+      // Verificar si ya existe un boleto con el mismo destino
+      const existingDestinationTicket = await Ticket.findOne({ destination });
+      if (existingDestinationTicket) {
+        return res.status(400).json({ message: 'Ya existe un boleto con el mismo destino' });
+      }
+  
+      // Verificar si ya existe un boleto con la misma fecha
+      const existingDateTicket = await Ticket.findOne({ date });
+      if (existingDateTicket) {
+        return res.status(400).json({ message: 'Ya existe un boleto con la misma fecha' });
+      }
+  
+      // Si no existe ningún boleto con los mismos datos, guardar el nuevo boleto
       const newTicket = new Ticket({ name, origin, destination, date });
       await newTicket.save();
       res.status(201).json(newTicket);
