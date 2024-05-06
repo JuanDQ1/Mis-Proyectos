@@ -12,7 +12,7 @@ const TiquetesHome = () => {
 
   useEffect(() => {
     if (origin) {
-      fetch(`http://localhost:3000/tiquetes/paises?query=${origin}`)
+      fetch(`https://backend-nine-iota-96.vercel.app/tiquetes/paises?query=${origin}`)
         .then((response) => response.json())
         .then((data) => setOriginSuggestions(data))
         .catch((error) =>
@@ -23,7 +23,7 @@ const TiquetesHome = () => {
 
   useEffect(() => {
     if (destination) {
-      fetch(`http://localhost:3000/tiquetes/paises?query=${destination}`)
+      fetch(`https://backend-nine-iota-96.vercel.app/tiquetes/paises?query=${destination}`)
         .then((response) => response.json())
         .then((data) => setDestinationSuggestions(data))
         .catch((error) =>
@@ -65,7 +65,7 @@ const TiquetesHome = () => {
     alert("¡Boleto generado!");
 
     // Realizar la solicitud POST al endpoint para guardar el tiquete
-    fetch("http://localhost:3000/tiquetes/tiquete", {
+    fetch("https://backend-nine-iota-96.vercel.app/tiquetes/tiquete", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
