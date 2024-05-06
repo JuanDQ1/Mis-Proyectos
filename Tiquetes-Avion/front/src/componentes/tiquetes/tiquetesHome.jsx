@@ -62,7 +62,7 @@ const TiquetesHome = () => {
       destination,
       date,
     };
-    alert("¡Boleto generado!");
+    
 
     // Realizar la solicitud POST al endpoint para guardar el tiquete
     fetch("https://backend-nine-iota-96.vercel.app/tiquetes/tiquete", {
@@ -79,6 +79,7 @@ const TiquetesHome = () => {
         return response.json();
       })
       .then((data) => {
+        alert("¡Boleto generado!");
         // Actualizar el estado para mostrar el boleto generado
         setGeneratedTickets([...generatedTickets, data]);
         // Limpiar los campos del formulario
@@ -86,6 +87,7 @@ const TiquetesHome = () => {
         setOrigin("");
         setDestination("");
         setDate("");
+        
       })
       .catch((error) => {
         console.error("Error al guardar el tiquete:", error);
