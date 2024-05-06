@@ -6,8 +6,9 @@
 }
 
 h1 {
-  font-size: 24px;
+  font-size: 40px;
   margin-bottom: 20px;
+  color: #2c2c2c;
 }
 
 .form-inline {
@@ -45,7 +46,7 @@ h1 {
 .generate-ticket-button {
   padding: 10px 20px;
   font-size: 16px;
-  background-color: #4CAF50;
+  background-color: #e28922;
   color: white;
   border: none;
   border-radius: 4px;
@@ -54,7 +55,7 @@ h1 {
 }
 
 .generate-ticket-button:hover {
-  background-color: #45a049;
+  background-color: #121312;
 }
 
 .generated-ticket-container {
@@ -82,4 +83,6 @@ h1 {
   justify-content: center;
   align-items: center;
 }
+
+
   

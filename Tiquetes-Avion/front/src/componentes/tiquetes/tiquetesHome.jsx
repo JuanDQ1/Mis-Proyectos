@@ -48,13 +48,13 @@ const TiquetesHome = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    
+
     // Verificar que el origen y el destino sean diferentes
     if (origin === destination) {
-      alert('El origen y el destino deben ser diferentes');
+      alert("El origen y el destino deben ser diferentes");
       return;
     }
-    
+
     // Construir el objeto del tiquete
     const ticket = {
       name,
@@ -62,34 +62,35 @@ const TiquetesHome = () => {
       destination,
       date,
     };
-    
+    alert("¡Boleto generado!");
+
     // Realizar la solicitud POST al endpoint para guardar el tiquete
-    fetch('http://localhost:3000/tiquetes/tiquete', {
-      method: 'POST',
+    fetch("http://localhost:3000/tiquetes/tiquete", {
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       body: JSON.stringify(ticket),
     })
-    .then(response => {
-      if (!response.ok) {
-        throw new Error('Error al guardar el tiquete');
-      }
-      return response.json();
-    })
-    .then(data => {
-      // Actualizar el estado para mostrar el boleto generado
-      setGeneratedTickets([...generatedTickets, data]);
-      // Limpiar los campos del formulario
-      setName('');
-      setOrigin('');
-      setDestination('');
-      setDate('');
-    })
-    .catch(error => {
-      console.error('Error al guardar el tiquete:', error);
-      // Manejar el error, mostrar un mensaje al usuario, etc.
-    });
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Error al guardar el tiquete");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        // Actualizar el estado para mostrar el boleto generado
+        setGeneratedTickets([...generatedTickets, data]);
+        // Limpiar los campos del formulario
+        setName("");
+        setOrigin("");
+        setDestination("");
+        setDate("");
+      })
+      .catch((error) => {
+        console.error("Error al guardar el tiquete:", error);
+        // Manejar el error, mostrar un mensaje al usuario, etc.
+      });
   };
 
   return (
