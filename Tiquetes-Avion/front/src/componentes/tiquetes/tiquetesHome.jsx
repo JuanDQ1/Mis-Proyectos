@@ -161,7 +161,6 @@ const TiquetesHome = () => {
         </div>
       </form>
 
-      {/* Contenedor para mostrar el boleto generado */}
       {generatedTickets.map((ticket, index) => (
         <div key={index} className="generated-ticket-container">
           <h2>¡Boleto generado!</h2>
