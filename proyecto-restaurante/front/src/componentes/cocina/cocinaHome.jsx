@@ -17,7 +17,7 @@ const Cocina = () => {
   const fetchPedidos = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:3000/restaurante/pedidos"
+        "https://backendrestaurante-h4e7vokfd.vercel.app/restaurante/pedidos"
       );
       setPedidos(response.data.pedidos);
     } catch (error) {
@@ -28,7 +28,7 @@ const Cocina = () => {
   const marcarPedidoListo = async (_id) => {
     try {
       // Envía una solicitud al backend para marcar el pedido como listo
-      await axios.post(`http://localhost:3000/restaurante/pedidosAc/${_id}`, {
+      await axios.post(`https://backendrestaurante-h4e7vokfd.vercel.app/restaurante/pedidosAc/${_id}`, {
         estado: "listo",
       });
   
