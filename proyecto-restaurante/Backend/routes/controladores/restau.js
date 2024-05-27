@@ -187,7 +187,7 @@ const marcarPedidoListo = async (req, res) => {
 const obtenerPedidosPorMesero = async (req, res) => {
     try {
         const mesero = req.params.mesero;
-        const pedidos = await Pedido.find({ mesero });
+        const pedidos = await Pedido.find({ mesero, estado: "listo" });
         res.status(200).json({ pedidos });
     } catch (error) {
         console.error('Error al obtener pedidos por mesero:', error);

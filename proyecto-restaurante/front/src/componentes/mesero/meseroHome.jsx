@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import '../styles/meseroHome.css';
 import axios from "axios";
+import { v4 as uuidv4 } from 'uuid';
 
 const MeseroHome = () => {
     const [mesa, setMesa] = useState('');
@@ -49,10 +50,13 @@ const MeseroHome = () => {
             return;
         }
 
+    
         const nuevosPedidos = productosSeleccionados.map(producto => {
             const selectedProduct = productos.find(p => p.name === producto.name);
             const precioTotal = selectedProduct.price * producto.cantidad;
-            return {         
+            return { 
+                id: uuidv4(),
+                idPedido: uuidv4(),        
                 mesa,
                 producto: producto.name,
                 cantidad: producto.cantidad,
@@ -61,8 +65,7 @@ const MeseroHome = () => {
                 mesero: localStorage.getItem('usuario')
             };
         });
-        console.log(nuevosPedidos);
-
+    
         try {
             // Enviar los pedidos al servidor backend
             await axios.post("http://localhost:3000/restaurante/pedidosGu", nuevosPedidos);

@@ -17,9 +17,12 @@ const VentasHome = () => {
       const response = await axios.get("http://localhost:3000/restaurante/pedidos");
       const ventas = response.data.pedidos;
 
-      // Agrupar ventas por mesero
+      // Filtrar solo las ventas que están listas
+      const ventasListas = ventas.filter(venta => venta.estado === 'listo');
+
+      // Agrupar ventas listas por mesero
       const ventasAgrupadasPorMesero = {};
-      ventas.forEach(venta => {
+      ventasListas.forEach(venta => {
         if (!ventasAgrupadasPorMesero[venta.mesero]) {
           ventasAgrupadasPorMesero[venta.mesero] = [];
         }
@@ -38,36 +41,35 @@ const VentasHome = () => {
       console.error("Error fetching ventas:", error);
     }
   };
+  
   const handleSalir = () => {
-    // Aquí puedes agregar la lógica para salir de la sesión, como limpiar el almacenamiento local o redirigir a la página de inicio de sesión
-    // Por ejemplo:
     window.location.href = '/menu'; // Redirige a la página de inicio de sesión
-};
+  };
 
   return (
     <div className="fondo-ventas">
-    <div>
-      <h1>Ventas</h1>
-      <button className="btn-salir" onClick={handleSalir}>Salir</button>
-      <table className="ventas-table">
-        <thead>
-          <tr>
-            <th>Mesero</th>
-            <th>Producto</th>
-            <th>Precio Total</th>
-          </tr>
-        </thead>
-        <tbody>
-          {ventasPorMesero.map((venta, index) => (
-            <tr key={index}>
-              <td>{venta.mesero}</td>
-              <td>{venta.productos.join(", ")}</td>
-              <td>{venta.precioTotal}</td>
+      <div>
+        <h1>Ventas</h1>
+        <button className="btn-salir" onClick={handleSalir}>Salir</button>
+        <table className="ventas-table">
+          <thead>
+            <tr>
+              <th>Mesero</th>
+              <th>Producto</th>
+              <th>Precio Total</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+          </thead>
+          <tbody>
+            {ventasPorMesero.map((venta, index) => (
+              <tr key={index}>
+                <td>{venta.mesero}</td>
+                <td>{venta.productos.join(", ")}</td>
+                <td>{venta.precioTotal}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 };
