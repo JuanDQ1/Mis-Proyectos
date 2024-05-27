@@ -43,7 +43,8 @@ const VentasHome = () => {
   };
   
   const handleSalir = () => {
-    window.location.href = '/menu'; // Redirige a la página de inicio de sesión
+    window.location.href = '/';
+  
   };
 
   return (

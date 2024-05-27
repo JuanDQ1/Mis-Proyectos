@@ -81,9 +81,7 @@ const AdminHome = () => {
   };
   console.log(products)
   const handleSalir = () => {
-    // Aquí puedes agregar la lógica para salir de la sesión, como limpiar el almacenamiento local o redirigir a la página de inicio de sesión
-    // Por ejemplo:
-    window.location.href = '/menu'; // Redirige a la página de inicio de sesión
+    window.location.href = '/';
 };
 
   return (
