@@ -20,7 +20,7 @@ const AdminHome = () => {
 
   const fetchProducts = async () => {
     try {
-      const response = await axios.get("https://backendrestaurante-h4e7vokfd.vercel.app/restaurante/productosOb");
+      const response = await axios.get("https://back-rho-seven.vercel.app/restaurante/productosOb");
       // console.log(response)
       setProducts(response.data);
     } catch (error) {
@@ -30,7 +30,7 @@ const AdminHome = () => {
 
   const addProduct = async () => {
     try {
-     const product = await axios.post("https://backendrestaurante-h4e7vokfd.vercel.app/restaurante/productosAg", newProduct);
+     const product = await axios.post("https://back-rho-seven.vercel.app/restaurante/productosAg", newProduct);
     //  console.log(product.data.productos);
      setProducts(product.data);
       setNewProduct({ name: "", price: "" });
@@ -55,7 +55,7 @@ const AdminHome = () => {
     console.log(products)
     try {
       // newProduct lo envie al backend 
-       await axios.post(`https://backendrestaurante-h4e7vokfd.vercel.app/restaurante/productosEdit`,newProduct);
+       await axios.post(`https://back-rho-seven.vercel.app/restaurante/productosEdit`,newProduct);
       setEditingProduct(null);
       fetchProducts();
     } catch (error) {
@@ -66,7 +66,7 @@ const AdminHome = () => {
   const deleteProduct = async (_id) => {
     try {
       
-      await axios.delete(`https://backendrestaurante-h4e7vokfd.vercel.app/restaurante/productosEli/${_id}`,);
+      await axios.delete(`https://back-rho-seven.vercel.app/restaurante/productosEli/${_id}`,);
   
       // Una vez que la eliminación sea exitosa, actualiza la lista de productos
       fetchProducts();

@@ -26,7 +26,7 @@ const MeseroHome = () => {
     
     const fetchProducts = async () => {
         try {
-            const response = await axios.get("https://backendrestaurante-h4e7vokfd.vercel.app/restaurante/productosOb");
+            const response = await axios.get("https://back-rho-seven.vercel.app/restaurante/productosOb");
             setProductos(response.data);
         } catch (error) {
             console.error("Error fetching products:", error);
@@ -35,7 +35,7 @@ const MeseroHome = () => {
 
     const fetchPedidos = async () => {
         try {
-            const response = await axios.get("https://backendrestaurante-h4e7vokfd.vercel.app/restaurante/pedidos");
+            const response = await axios.get("https://back-rho-seven.vercel.app/restaurante/pedidos");
             setPedidos(response.data.pedidos);
         } catch (error) {
             console.error("Error fetching pedidos:", error);
@@ -68,7 +68,7 @@ const MeseroHome = () => {
     
         try {
             // Enviar los pedidos al servidor backend
-            await axios.post("https://backendrestaurante-h4e7vokfd.vercel.app/restaurante/pedidosGu", nuevosPedidos);
+            await axios.post("https://back-rho-seven.vercel.app/restaurante/pedidosGu", nuevosPedidos);
             console.log("Pedidos guardados:", nuevosPedidos);
             // Actualizar la lista de pedidos en el estado local
             setPedidos([...pedidos, ...nuevosPedidos]);

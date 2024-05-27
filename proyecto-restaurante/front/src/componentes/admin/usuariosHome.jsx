@@ -19,7 +19,7 @@ const UsuariosHome = () => {
   const fetchUsers = async () => {
     try {
       const response = await axios.get(
-        "https://backendrestaurante-h4e7vokfd.vercel.app/restaurante/usuariosOb"
+        "https://back-rho-seven.vercel.app/restaurante/usuariosOb"
       );
       setUsers(response.data);
     } catch (error) {
@@ -30,7 +30,7 @@ const UsuariosHome = () => {
   const addUser = async () => {
     try {
       const user = await axios.post(
-        "https://backendrestaurante-h4e7vokfd.vercel.app/restaurante/usuariosAg",
+        "https://back-rho-seven.vercel.app/restaurante/usuariosAg",
         newUser
       );
       console.log(user);
@@ -59,7 +59,7 @@ const UsuariosHome = () => {
     console.log(newUser);
     try {
       await axios.post(
-        `https://backendrestaurante-h4e7vokfd.vercel.app/restaurante/usuariosEdit`,
+        `https://back-rho-seven.vercel.app/restaurante/usuariosEdit`,
         newUser
       );
       setEditingUser(null);
@@ -71,7 +71,7 @@ const UsuariosHome = () => {
 
   const deleteUser = async (_id) => {
     try {
-      await axios.delete(`https://backendrestaurante-h4e7vokfd.vercel.app/restaurante/usuariosEli/${_id}`);
+      await axios.delete(`https://back-rho-seven.vercel.app/restaurante/usuariosEli/${_id}`);
 
       // Una vez que la eliminación sea exitosa, actualiza la lista de productos
       fetchUsers();

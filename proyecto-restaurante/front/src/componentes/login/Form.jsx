@@ -11,7 +11,7 @@ function Form({ callback }) {
   const handleSubmit = async (event) => {
     event.preventDefault();
     const response = await fetch(
-      "https://backendrestaurante-h4e7vokfd.vercel.app/restaurante/consultarUsuario",
+      "https://back-rho-seven.vercel.app/restaurante/consultarUsuario",
       {
         method: "POST",
         headers: {

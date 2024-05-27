@@ -14,7 +14,7 @@ const VentasHome = () => {
 
   const fetchVentas = async () => {
     try {
-      const response = await axios.get("https://backendrestaurante-h4e7vokfd.vercel.app/restaurante/pedidos");
+      const response = await axios.get("https://back-rho-seven.vercel.app/restaurante/pedidos");
       const ventas = response.data.pedidos;
 
       // Filtrar solo las ventas que están listas
